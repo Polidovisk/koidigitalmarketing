@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KOI Digital Marketing - Mergulhe no Sucesso</title>
+    
+    <!-- Favicon Personalizado (Ícone do Separador) -->
+    <link rel="icon" href="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3e%3ccircle cx='50' cy='50' r='50' fill='%23004e92'/%3e%3c/svg%3e">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        /* =================================================================
+           ESTILOS GLOBAIS E PERSONALIZADOS
+           ================================================================= */
+        
+        /* Define a fonte padrão e o comportamento de rolagem suave */
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Estilo de vidro (Glassmorphism) para os cards e cabeçalho */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Fundo com gradiente animado para criar uma sensação de profundidade */
+        .animated-background {
+            background: linear-gradient(270deg, #000428, #004e92, #0d1117, #000428);
+            background-size: 800% 800%;
+            animation: gradientAnimation 20s ease infinite;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Animação para os elementos aparecerem ao rolar a página */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Linha decorativa laranja abaixo dos títulos de secção */
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 3px;
+            background-color: #f97316;
+            margin: 8px auto 0;
+            border-radius: 2px;
+        }
+
+        /* =================================================================
+           ANIMAÇÃO DA FORMA ORGÂNICA (BLOB)
+           ================================================================= */
+        
+        .morph-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        /* Filtro SVG que cria o efeito "viscoso" (gooey) */
+        .gooey-shape {
+            filter: url(#gooey-effect);
+        }
+        
+        /* Animação de flutuação para a forma principal */
+        .floating-morph {
+            animation: float 8s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Animação de metamorfose do caminho SVG */
+        .morph-path {
+            animation: morph 12s ease-in-out infinite;
+        }
+
+        @keyframes morph {
+            0% { d: path("M204.2,66.7C224.4,103.8,200.2,161,161,181.1C121.8,201.2,67.5,184.2,34,151.7C0.5,119.2,-12.3,71.2,12.7,44.9C37.7,18.6,100.4,14,143.2,25.3C186,36.5,204.2,66.7,204.2,66.7Z"); }
+            25% { d: path("M183.8,79.3C210.7,118.4,209.1,173.8,177,192.2C144.9,210.7,82.3,192.2,46.1,162.5C9.9,132.8,-0.1,91.8,12.7,60.8C25.5,29.8,71.1,8.8,110.4,12.7C149.7,16.6,183.8,79.3,183.8,79.3Z"); }
+            50% { d: path("M203,79.7C223.3,123.5,193.3,180.5,153,195.3C112.7,210.2,62,182.8,32.6,146C3.2,109.2,-4.8,63,12.7,42.8C30.2,22.7,83.2,28.7,125,40.3C166.8,52,203,79.7,203,79.7Z"); }
+            75% { d: path("M182.9,64.8C201.6,97.1,192.1,146.4,161,169.2C130,192.1,77.5,188.4,46.1,162.5C14.7,136.6,4.4,88.5,17.4,56C30.4,23.5,66.7,6.6,101.4,9.6C136.1,12.6,182.9,64.8,182.9,64.8Z"); }
+            100% { d: path("M204.2,66.7C224.4,103.8,200.2,161,161,181.1C121.8,201.2,67.5,184.2,34,151.7C0.5,119.2,-12.3,71.2,12.7,44.9C37.7,18.6,100.4,14,143.2,25.3C186,36.5,204.2,66.7,204.2,66.7Z"); }
+        }
+        
+        /* Círculo que segue o cursor para a interação de deformação */
+        .cursor-follower-circle {
+            r: 0;
+            transition: r 0.3s ease-out;
+        }
+
+        /* =================================================================
+           EFEITOS DE FUNDO E CURSOR
+           ================================================================= */
+           
+        /* Efeito de brilho que segue o cursor */
+        #cursor-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(249, 115, 22, 0.1), transparent 60%);
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+            z-index: 0;
+            transition: opacity 0.3s;
+        }
+
+        /* Bolhas animadas no fundo do site */
+        #background-bubbles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .bg-bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(249, 115, 22, 0.05);
+            animation: bg-bubble-drift linear infinite;
+        }
+
+        @keyframes bg-bubble-drift {
+            from { transform: translateY(100vh) scale(0); }
+            to { transform: translateY(-20vh) scale(1.2); }
+        }
+        
+        /* =================================================================
+           ESTILOS DO CHATBOT
+           ================================================================= */
+        
+        /* Botões de perguntas rápidas no chatbot */
+        .quick-question {
+            border: 1px solid rgba(249, 115, 22, 0.5);
+            background-color: rgba(249, 115, 22, 0.1);
+            color: #f97316;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+        .quick-question:hover {
+            background-color: rgba(249, 115, 22, 0.3);
+            border-color: rgba(249, 115, 22, 0.8);
+        }
+
+    </style>
+</head>
+<body class="animated-background text-gray-200">
+    
+    <!-- Filtro SVG para o efeito "gooey" (viscoso) na forma animada -->
+    <svg style="position:absolute; width:0; height:0;">
+        <defs>
+            <filter id="gooey-effect">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -7" result="goo" />
+                <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+        </defs>
+    </svg>
+
+    <!-- Elementos de fundo para efeitos visuais -->
+    <div id="cursor-glow"></div>
+    <div id="background-bubbles"></div>
+
+    <!-- =================================================================
+         CABEÇALHO E NAVEGAÇÃO
+         ================================================================= -->
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center relative">
+            
+            <!-- Logótipo -->
+            <a href="#" class="flex-shrink-0">
+                <svg class="h-8" viewBox="0 0 380 50" fill="white">
+                    <circle cx="25" cy="25" r="18" fill="#f97316"/>
+                    <text x="55" y="35" font-family="Inter, sans-serif" font-size="28" font-weight="bold">KOI</text>
+                    <text x="110" y="35" font-family="Inter, sans-serif" font-size="28" font-weight="300">Digital Marketing</text>
+                </svg>
+            </a>
+
+            <!-- Menu para Desktop (Centralizado) -->
+            <div class="hidden md:flex items-center space-x-8 absolute left-1/2 -translate-x-1/2">
+                <a href="#inicio" class="text-gray-300 hover:text-white transition-colors">Início</a>
+                <a href="#servicos" class="text-gray-300 hover:text-white transition-colors">Serviços</a>
+                <a href="#sobre" class="text-gray-300 hover:text-white transition-colors">Sobre Nós</a>
+                <a href="#contato" class="text-gray-300 hover:text-white transition-colors">Contato</a>
+            </div>
+
+            <!-- Grupo da Direita (Botão de Contato e Ícone Mobile) -->
+            <div class="flex items-center">
+                <!-- Botão de Contato para Desktop -->
+                <a href="#contato" class="hidden md:block bg-orange-600 hover:bg-orange-700 text-white font-bold py-2 px-5 rounded-full transition-transform transform hover:scale-105">
+                    Fale Conosco
+                </a>
+    
+                <!-- Botão do Menu para Mobile (Hambúrguer) -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Painel do Menu Mobile (oculto por padrão) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-black/30 backdrop-blur-md">
+            <a href="#inicio" class="block py-3 px-6 text-center text-gray-300 hover:bg-orange-600/50 hover:text-white transition-colors">Início</a>
+            <a href="#servicos" class="block py-3 px-6 text-center text-gray-300 hover:bg-orange-600/50 hover:text-white transition-colors">Serviços</a>
+            <a href="#sobre" class="block py-3 px-6 text-center text-gray-300 hover:bg-orange-600/50 hover:text-white transition-colors">Sobre Nós</a>
+            <a href="#contato" class="block py-3 px-6 text-center text-gray-300 hover:bg-orange-600/50 hover:text-white transition-colors">Contato</a>
+        </div>
+    </header>
+
+    <!-- =================================================================
+         CONTEÚDO PRINCIPAL DO SITE
+         ================================================================= -->
+    <main class="container mx-auto px-6 relative z-10">
+
+        <!-- ===== SECÇÃO DE INÍCIO (HERO) ===== -->
+        <section id="inicio" class="min-h-screen flex items-center justify-center pt-24">
+            <div class="text-center relative">
+                <!-- Animação Central -->
+                <div class="w-80 h-80 morph-container mx-auto mb-8 flex items-center justify-center">
+                    <svg class="gooey-shape floating-morph" width="220" height="220" viewBox="0 0 220 220">
+                        <g>
+                            <path class="morph-path" fill="#f97316" d="M204.2,66.7C224.4,103.8,200.2,161,161,181.1C121.8,201.2,67.5,184.2,34,151.7C0.5,119.2,-12.3,71.2,12.7,44.9C37.7,18.6,100.4,14,143.2,25.3C186,36.5,204.2,66.7,204.2,66.7Z"/>
+                            <circle class="cursor-follower-circle" fill="#f97316" cx="110" cy="110" r="0"/>
+                        </g>
+                    </svg>
+                </div>
+                
+                <h1 class="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-4">
+                    KOI <span class="text-orange-500">Digital</span> Marketing
+                </h1>
+                <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+                    Mergulhe no sucesso. Navegamos pelas correntes do marketing digital para levar seu negócio ao topo.
+                </p>
+                <a href="#servicos" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-8 rounded-full text-lg transition-transform transform hover:scale-105 inline-block">
+                    Descubra Nossos Serviços
+                </a>
+            </div>
+        </section>
+
+        <!-- ===== SECÇÃO DE SERVIÇOS ===== -->
+        <section id="servicos" class="py-20 scroll-mt-20">
+            <div>
+                <h2 class="section-title text-3xl font-bold text-center text-white mb-12 fade-in-up">Nossas Especialidades</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+                    <!-- Card de Serviço: SEO -->
+                    <div class="glass-effect rounded-2xl p-8 text-center transition-all duration-300 hover:border-orange-500/50 hover:scale-105 fade-in-up" style="transition-delay: 100ms;">
+                        <div class="text-orange-500 mb-4">
+                            <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">SEO de Performance</h3>
+                        <p class="text-gray-400">Otimizamos seu site para que ele seja encontrado por quem realmente importa, posicionando sua marca no topo do Google.</p>
+                    </div>
+                    
+                    <!-- Card de Serviço: Mídias Sociais -->
+                    <div class="glass-effect rounded-2xl p-8 text-center transition-all duration-300 hover:border-orange-500/50 hover:scale-105 fade-in-up" style="transition-delay: 200ms;">
+                        <div class="text-orange-500 mb-4">
+                           <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Gestão de Mídias</h3>
+                        <p class="text-gray-400">Criamos conexões autênticas e engajamento real. Sua marca se torna uma voz ativa e relevante nas redes sociais.</p>
+                    </div>
+
+                    <!-- Card de Serviço: Tráfego Pago -->
+                    <div class="glass-effect rounded-2xl p-8 text-center transition-all duration-300 hover:border-orange-500/50 hover:scale-105 fade-in-up" style="transition-delay: 300ms;">
+                        <div class="text-orange-500 mb-4">
+                            <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-3">Tráfego Pago (Ads)</h3>
+                        <p class="text-gray-400">Investimento inteligente para resultados rápidos. Criamos campanhas otimizadas que geram leads e vendas.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== SECÇÃO SOBRE NÓS ===== -->
+        <section id="sobre" class="py-20 scroll-mt-20">
+             <div class="glass-effect rounded-2xl p-10 md:p-16 fade-in-up">
+                 <div class="flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/2">
+                        <h2 class="section-title text-3xl font-bold text-white mb-6 text-center">Nossa Filosofia</h2>
+                        <p class="text-gray-300 mb-4 text-center md:text-left">A KOI Digital Marketing nasceu da crença de que toda empresa, como uma carpa, possui a força para crescer e se destacar, mesmo contra a corrente. Não apenas criamos estratégias; construímos jornadas de sucesso.</p>
+                        <p class="text-gray-300 text-center md:text-left">Nossa equipe é movida por dados, criatividade e uma paixão por ver nossos clientes prosperarem. Somos mais que uma agência; somos seus parceiros na conquista do universo digital.</p>
+                    </div>
+                    <div class="md:w-1/2 flex justify-center">
+                        <!-- Animação Central Secundária -->
+                        <div class="w-64 h-64 morph-container flex items-center justify-center">
+                             <svg class="gooey-shape" width="180" height="180" viewBox="0 0 220 220">
+                                <g>
+                                    <path class="morph-path" fill="#f97316" d="M204.2,66.7C224.4,103.8,200.2,161,161,181.1C121.8,201.2,67.5,184.2,34,151.7C0.5,119.2,-12.3,71.2,12.7,44.9C37.7,18.6,100.4,14,143.2,25.3C186,36.5,204.2,66.7,204.2,66.7Z"/>
+                                    <circle class="cursor-follower-circle" fill="#f97316" cx="110" cy="110" r="0"/>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+        </section>
+
+        <!-- ===== SECÇÃO DE CONTATO ===== -->
+        <section id="contato" class="py-20 scroll-mt-20">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="section-title text-3xl font-bold text-center text-white mb-12 fade-in-up">Vamos Conversar?</h2>
+                <div class="glass-effect rounded-2xl p-8 md:p-12 fade-in-up" style="transition-delay: 150ms;">
+                    <p class="text-center text-gray-300 mb-8">Envie sua mensagem e vamos juntos traçar o plano perfeito para o seu crescimento.</p>
+                    
+                    <!-- Formulário de Contato - Integrado com Formspree -->
+                    <form id="contact-form" action="https://formspree.io/f/mzzgdnyg" method="POST">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <input type="text" name="name" placeholder="Seu nome" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" required>
+                            <input type="email" name="email" placeholder="Seu melhor e-mail" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" required>
+                        </div>
+                        <div class="mb-6">
+                            <textarea name="message" placeholder="Sua mensagem..." rows="5" class="w-full bg-gray-900/50 border border-gray-700 rounded-lg py-3 px-4 text-white focus:outline-none focus:ring-2 focus:ring-orange-500 transition-all" required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white font-bold py-3 px-12 rounded-full text-lg transition-transform transform hover:scale-105">
+                                Enviar Mensagem
+                            </button>
+                        </div>
+                    </form>
+                     <p id="form-status" class="text-center mt-6 text-green-400"></p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =================================================================
+         RODAPÉ
+         ================================================================= -->
+    <footer class="bg-black/20 mt-20 relative z-10">
+        <div class="container mx-auto px-6 py-8 text-center text-gray-400">
+            <div class="flex flex-col items-center">
+                <!-- Ícone do Instagram -->
+                <a href="https://www.instagram.com/koi.marketingdigital/" target="_blank" rel="noopener noreferrer" class="mb-4 text-gray-400 hover:text-orange-500 transition-colors">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke-width="2">
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                        <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                        <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                    </svg>
+                </a>
+                <p>&copy; 2025 KOI Digital Marketing. Todos os direitos reservados.</p>
+                <p class="text-sm mt-2">Nadando contra a corrente.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- =================================================================
+         CHATBOT
+         ================================================================= -->
+    <div id="chatbot-container" class="fixed bottom-6 right-6 z-50 transition-all duration-300">
+        <button id="chatbot-toggle" class="w-16 h-16 rounded-full bg-orange-600 text-white shadow-lg flex items-center justify-center hover:bg-orange-700 transition-transform hover:scale-110">
+            <svg id="chat-icon-open" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+            </svg>
+             <svg id="chat-icon-close" xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <div id="chatbot-window" class="hidden absolute bottom-24 right-0 w-80 sm:w-96 glass-effect rounded-lg shadow-2xl overflow-hidden border border-gray-700">
+            <div class="bg-gray-900/50 px-4 py-3 flex justify-between items-center border-b border-gray-700">
+                <h5 class="text-white font-semibold flex items-center">
+                    <span class="relative flex h-3 w-3 mr-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    </span>
+                    Assistente KOI
+                </h5>
+            </div>
+            <div id="chatbot-messages" class="p-4 h-80 overflow-y-auto">
+                <!-- Mensagens do chat são inseridas aqui dinamicamente -->
+            </div>
+            <div id="chatbot-quick-questions" class="px-4 pb-3 flex flex-wrap gap-2">
+                <!-- Botões de perguntas rápidas são inseridos aqui dinamicamente -->
+            </div>
+            <div id="chatbot-typing-indicator" class="px-4 pb-2 hidden">
+                <span class="text-sm text-gray-400 italic">Assistente está a escrever...</span>
+            </div>
+            <div class="p-3 border-t border-gray-700">
+                <div class="relative">
+                    <input type="text" id="chatbot-input" placeholder="Escreva sua mensagem..." class="w-full bg-gray-900/50 border border-gray-600 rounded-full py-2 pl-4 pr-12 text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
+                    <button id="chatbot-send" class="absolute top-1/2 right-2 -translate-y-1/2 bg-orange-600 hover:bg-orange-700 text-white rounded-full p-2 focus:outline-none transition-transform hover:scale-110">
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =================================================================
+         SCRIPTS
+         ================================================================= -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // =================================================================
+            // INICIALIZAÇÃO DE EFEITOS VISUAIS
+            // =================================================================
+            
+            /**
+             * Efeito de brilho que segue o cursor do rato.
+             */
+            const initCursorGlow = () => {
+                const glow = document.getElementById('cursor-glow');
+                document.addEventListener('mousemove', (e) => {
+                    glow.style.left = `${e.clientX}px`;
+                    glow.style.top = `${e.clientY}px`;
+                });
+            };
+
+            /**
+             * Gera bolhas animadas aleatórias no fundo da página.
+             */
+            const initBackgroundBubbles = () => {
+                const bgBubblesContainer = document.getElementById('background-bubbles');
+                const bubblesCount = 20;
+                for (let i = 0; i < bubblesCount; i++) {
+                    const bubble = document.createElement('div');
+                    bubble.classList.add('bg-bubble');
+                    const size = Math.random() * 200 + 50;
+                    bubble.style.width = `${size}px`;
+                    bubble.style.height = `${size}px`;
+                    bubble.style.left = `${Math.random() * 100}%`;
+                    bubble.style.animationDuration = `${Math.random() * 20 + 15}s`;
+                    bubble.style.animationDelay = `${Math.random() * -15}s`;
+                    bgBubblesContainer.appendChild(bubble);
+                }
+            };
+            
+            /**
+             * Efeito de deformação interativa na forma principal.
+             */
+            const initInteractiveMorph = () => {
+                document.querySelectorAll('.morph-container').forEach(container => {
+                    const svg = container.querySelector('svg');
+                    if (!svg) return;
+                    const cursorFollower = svg.querySelector('.cursor-follower-circle');
+                    if (!cursorFollower) return;
+
+                    container.addEventListener('mousemove', (e) => {
+                        const rect = svg.getBoundingClientRect();
+                        const scaleX = svg.viewBox.baseVal.width / rect.width;
+                        const scaleY = svg.viewBox.baseVal.height / rect.height;
+                        const x = (e.clientX - rect.left) * scaleX;
+                        const y = (e.clientY - rect.top) * scaleY;
+                        cursorFollower.setAttribute('cx', x);
+                        cursorFollower.setAttribute('cy', y);
+                    });
+
+                    container.addEventListener('mouseenter', () => {
+                        cursorFollower.setAttribute('r', '40');
+                    });
+
+                    container.addEventListener('mouseleave', () => {
+                        cursorFollower.setAttribute('r', '0');
+                    });
+                });
+            };
+
+            /**
+             * Animação de fade-in para elementos ao rolar a página.
+             */
+            const initScrollAnimations = () => {
+                const faders = document.querySelectorAll('.fade-in-up');
+                const appearOptions = {
+                    threshold: 0.2,
+                    rootMargin: "0px 0px -50px 0px"
+                };
+                const appearOnScroll = new IntersectionObserver(function(entries, observer) { 
+                    entries.forEach(entry => {
+                        if (!entry.isIntersecting) {
+                            return;
+                        } else {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, appearOptions);
+                faders.forEach(fader => {
+                    appearOnScroll.observe(fader);
+                });
+            };
+
+            // =================================================================
+            // LÓGICA DO MENU
+            // =================================================================
+            
+            const initMenu = () => {
+                const mobileMenuButton = document.getElementById('mobile-menu-button');
+                const mobileMenu = document.getElementById('mobile-menu');
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+                mobileMenu.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'A') {
+                        mobileMenu.classList.add('hidden');
+                    }
+                });
+
+                const header = document.getElementById('header');
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 50) {
+                        header.classList.add('glass-effect', 'shadow-lg');
+                    } else {
+                        header.classList.remove('glass-effect', 'shadow-lg');
+                    }
+                });
+            };
+            
+            // =================================================================
+            // LÓGICA DO FORMULÁRIO DE CONTATO (FORMSPREE)
+            // =================================================================
+
+            const initContactForm = () => {
+                const form = document.getElementById("contact-form");
+                const status = document.getElementById("form-status");
+
+                async function handleSubmit(event) {
+                  event.preventDefault();
+                  var data = new FormData(event.target);
+                  fetch(event.target.action, {
+                    method: form.method,
+                    body: data,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                  }).then(response => {
+                    if (response.ok) {
+                      status.innerHTML = "Obrigado pelo seu contato!";
+                      status.style.color = '#4ade80'; // Verde para sucesso
+                      form.reset()
+                    } else {
+                      response.json().then(data => {
+                        if (Object.hasOwn(data, 'errors')) {
+                          status.innerHTML = data["errors"].map(error => error["message"]).join(", ")
+                        } else {
+                          status.innerHTML = "Oops! Ocorreu um problema ao enviar o seu formulário."
+                        }
+                        status.style.color = '#f87171'; // Vermelho para erro
+                      })
+                    }
+                  }).catch(error => {
+                    status.innerHTML = "Oops! Ocorreu um problema ao enviar o seu formulário."
+                    status.style.color = '#f87171'; // Vermelho para erro
+                  });
+                }
+                form.addEventListener("submit", handleSubmit)
+            };
+
+            // =================================================================
+            // LÓGICA DO CHATBOT COM RESPOSTAS PRONTAS
+            // =================================================================
+            
+            const initChatbot = () => {
+                const chatbotToggle = document.getElementById('chatbot-toggle');
+                const chatbotWindow = document.getElementById('chatbot-window');
+                const openIcon = document.getElementById('chat-icon-open');
+                const closeIcon = document.getElementById('chat-icon-close');
+                const messagesContainer = document.getElementById('chatbot-messages');
+                const quickQuestionsContainer = document.getElementById('chatbot-quick-questions');
+                const chatbotInput = document.getElementById('chatbot-input');
+                const sendBtn = document.getElementById('chatbot-send');
+                const typingIndicator = document.getElementById('chatbot-typing-indicator');
+
+                const predefinedQA = {
+                    'default': 'Desculpe, não entendi sua pergunta. Pode tentar reformular? Sou um assistente programado para responder sobre nossos serviços: SEO, Mídias Sociais e Tráfego Pago.',
+                    'quais são os seus serviços?': 'Oferecemos SEO de Performance, Gestão de Mídias Sociais e Tráfego Pago (Ads). Em qual deles posso ajudar com mais detalhes?',
+                    'o que é seo?': 'SEO (Otimização para Mecanismos de Busca) é o processo de melhorar seu site para aumentar a visibilidade nos resultados de busca do Google e outros motores de busca, atraindo mais tráfego orgânico.',
+                    'qual a sua rede social?': 'Você pode nos encontrar no Instagram em @koi.marketingdigital!',
+                    'mídias': 'Gerimos suas redes sociais para criar conexões autênticas com seu público, aumentar o engajamento e fortalecer a presença online da sua marca.',
+                    'sociais': 'Gerimos suas redes sociais para criar conexões autênticas com seu público, aumentar o engajamento e fortalecer a presença online da sua marca.',
+                    'tráfego': 'Criamos e gerimos campanhas de anúncios pagos (Tráfego Pago) no Google, Instagram, Facebook, etc., para gerar leads e vendas de forma rápida e eficiente.',
+                    'ads': 'Criamos e gerimos campanhas de anúncios pagos (Tráfego Pago) no Google, Instagram, Facebook, etc., para gerar leads e vendas de forma rápida e eficiente.',
+                    'anúncios': 'Criamos e gerimos campanhas de anúncios pagos (Tráfego Pago) no Google, Instagram, Facebook, etc., para gerar leads e vendas de forma rápida e eficiente.',
+                    'contato': 'Você pode entrar em contato conosco preenchendo o formulário na secção "Vamos Conversar?" ou, se preferir, através do e-mail gabrielhpolido@gmail.com.',
+                    'falar': 'Você pode entrar em contato conosco preenchendo o formulário na secção "Vamos Conversar?" ou, se preferir, através do e-mail gabrielhpolido@gmail.com.',
+                    'quem': 'Somos a KOI Digital Marketing, uma agência parceira na conquista do universo digital. Nossa equipe é movida por dados e criatividade para ajudar nossos clientes a prosperar.',
+                    'sobre': 'Somos a KOI Digital Marketing, uma agência parceira na conquista do universo digital. Nossa equipe é movida por dados e criatividade para ajudar nossos clientes a prosperar.'
+                };
+                
+                const quickQuestions = [
+                    "Quais são os seus serviços?",
+                    "Qual a sua rede social?",
+                    "O que é SEO?"
+                ];
+                
+                // Função para adicionar uma mensagem à janela do chat de forma segura
+                const addMessage = (sender, text) => {
+                    const sanitizedText = text.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+                    const messageWrapper = document.createElement('div');
+                    messageWrapper.classList.add('flex', 'mb-3', 'max-w-xs', 'text-sm');
+
+                    if (sender === 'user') {
+                        messageWrapper.classList.add('ml-auto');
+                        messageWrapper.innerHTML = `<div class="bg-orange-600 text-white rounded-lg p-3">${sanitizedText}</div>`;
+                    } else {
+                        messageWrapper.innerHTML = `<div class="bg-gray-700/60 rounded-lg p-3">${sanitizedText}</div>`;
+                    }
+                    messagesContainer.appendChild(messageWrapper);
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                };
+                
+                // Função para mostrar as perguntas rápidas
+                const displayQuickQuestions = () => {
+                    quickQuestionsContainer.innerHTML = '';
+                    quickQuestions.forEach(question => {
+                        const button = document.createElement('button');
+                        button.textContent = question;
+                        button.classList.add('quick-question', 'text-sm');
+                        button.onclick = () => handleQuickQuestionClick(question);
+                        quickQuestionsContainer.appendChild(button);
+                    });
+                };
+                
+                // Função para obter a resposta do bot
+                const getBotResponse = (userMessage) => {
+                    typingIndicator.classList.remove('hidden');
+                     setTimeout(() => {
+                        let botResponse = predefinedQA['default'];
+                        if (predefinedQA[userMessage]) {
+                            botResponse = predefinedQA[userMessage];
+                        } else {
+                            for (const keyword in predefinedQA) {
+                                if (userMessage.includes(keyword)) {
+                                    botResponse = predefinedQA[keyword];
+                                    break;
+                                }
+                            }
+                        }
+                        addMessage('bot', botResponse);
+                        typingIndicator.classList.add('hidden');
+                    }, 1000);
+                };
+
+                const handleQuickQuestionClick = (question) => {
+                    addMessage('user', question);
+                    getBotResponse(question.toLowerCase());
+                    quickQuestionsContainer.style.display = 'none'; 
+                };
+                
+                const handleSendMessage = () => {
+                    const userMessage = chatbotInput.value.trim();
+                    if (!userMessage) return;
+                    addMessage('user', userMessage);
+                    chatbotInput.value = '';
+                    quickQuestionsContainer.style.display = 'none'; 
+                    getBotResponse(userMessage.toLowerCase());
+                };
+                
+                // Inicialização do Chatbot
+                addMessage('bot', 'Olá! Sou o assistente virtual da KOI. Como posso ajudar?');
+                displayQuickQuestions();
+                
+                chatbotToggle.addEventListener('click', () => {
+                    chatbotWindow.classList.toggle('hidden');
+                    openIcon.classList.toggle('hidden');
+                    closeIcon.classList.toggle('hidden');
+                });
+
+                sendBtn.addEventListener('click', handleSendMessage);
+                chatbotInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') handleSendMessage();
+                });
+            };
+
+            // =================================================================
+            // INICIALIZAÇÃO GERAL DE TODAS AS FUNÇÕES
+            // =================================================================
+            
+            initCursorGlow();
+            initBackgroundBubbles();
+            initInteractiveMorph();
+            initScrollAnimations();
+            initMenu();
+            initContactForm();
+            initChatbot();
+
+        });
+    </script>
+</body>
+</html>
